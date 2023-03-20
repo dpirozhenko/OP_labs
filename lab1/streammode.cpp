@@ -5,11 +5,10 @@ void generate_data(std::string filename, int mode) {
     std::cout << "Enter the text: ";
 
     std::string line;
-    std::string text;
+    std::string text = {0};
 
     if (mode == 0) {
         std::ofstream myFile(filename);
-        std::cin.ignore();
 
         while (true) {
             std::getline(std::cin, text);
@@ -50,28 +49,27 @@ void read_file(std::string filename) {
 
 }
 
-int countOddWords(std::string line) {
-    int count = 0;
-    int len = 0;
 
+
+int count_odd_words(std::string line) {
+    int count = 0;
+    int wordLength = 0;
     for (char c : line) {
-        if (c == ' ') {
-            if (len % 2 != 0) {
-                count++;
-            }
-            len = 0;
+        if (isalpha(c)) {
+            wordLength++;
         }
         else {
-            len++;
+            if (wordLength % 2 == 1) {
+                count++;
+            }
+            wordLength = 0;
         }
     }
-    
-    if (len % 2 != 0) {
+    if (wordLength % 2 == 1) {
         count++;
     }
     return count;
 }
-
 
 
 void strings(std::string filename) {
@@ -98,7 +96,8 @@ void strings(std::string filename) {
                     b += c;
                 }
             }
-            outFile << b << a << ", " << countOddWords(line) << std::endl;
+            std::string new_line = b + a;
+            outFile << new_line << ", " << count_odd_words(new_line) << std::endl;
         }
     }
     myFile.close();
