@@ -6,6 +6,6 @@
 
 void generate_data(std::string, int);
 void read_file(std::string);
-int count_odd_words(const std::string&);
+int count_odd_words(std::string);
 void strings(std::string);
 void streammode(std::string, int);
