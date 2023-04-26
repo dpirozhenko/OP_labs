@@ -58,7 +58,7 @@ Meeting::Meeting(string n_ame, string p_lace, int year, int month, int day, int 
     void Meeting::info() {
         int t1 = this->getTime() / 60;
         int t2 = this->getTime() % 60;
-        this->printDate();              //наче мило а наче і хуйня 
+        this->printDate();               
         if (t2 < 10) {
             cout << setw(4) << t1 << ":0" << t2;
         }
