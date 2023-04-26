@@ -30,7 +30,7 @@ public:
 
     void printDate();
 
-    virtual void info() = 0;//?????
+    virtual void info() = 0;
 
     void time_left(int given);
 };
