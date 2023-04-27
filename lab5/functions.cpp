@@ -3,100 +3,87 @@
 
 
 Event::Event() {
-        date = { 0 };
-        time = 0;
-    }
+    date = { 0 };
+    time = 0;
+}
 
 Event::Event(int y_ear, int m_onth, int d_ay, int t_ime) {
-        date.tm_year = y_ear;
-        date.tm_mon = m_onth;
-        date.tm_mday = d_ay;
-        time = t_ime;
+    date.tm_year = y_ear;
+    date.tm_mon = m_onth;
+    date.tm_mday = d_ay;
+    time = t_ime;
+}
+
+
+int Event::getTime() { return time; }
+
+void Event::printDate() {
+    cout << setw(3) << date.tm_mday << "." << date.tm_mon << "." << date.tm_year;
+}
+
+void Event::Event::time_left(int given) {
+    int t = time - given;
+    int hour = t / 60;
+    int min = t % 60;
+
+    cout << "\nTime gap:";
+
+    if (min < 10) {
+        cout << setw(4) << hour << "hours 0" << min << " minutes" << endl;
+    }else {
+        cout << setw(4) << hour << "hours " << min << " minutes" << endl;
     }
-
-    int Event::getYear() { return date.tm_year; }
-
-    int Event::getMonth() { return date.tm_mon; }
-
-    int Event::getDay() { return date.tm_mday; }
-
-    int Event::getTime() { return time; }
-
-    void Event::printDate() {
-        cout << setw(3) << date.tm_mday << "." << date.tm_mon << "." << date.tm_year;
-    }
-
-
-    void Event::Event::time_left(int given) {
-        int t = time - given;
-        int hour = t / 60;
-        int min = t % 60;
-
-        cout << "\nTime gap:";
-
-        if (min < 10) {
-            cout << setw(4) << hour << "hours 0" << min << " minutes" << endl;
-        }
-        else {
-            cout << setw(4) << hour << "hours " << min << " minutes" << endl;
-        }
-    }
-
-
+}
 
 
 Meeting::Meeting() {
-        name = "";
-        place = "";
-    }
+    name = "";
+    place = "";
+}
 
 Meeting::Meeting(string n_ame, string p_lace, int year, int month, int day, int t_ime) : Event(year, month, day, t_ime) {
-        name = n_ame;
-        place = p_lace;
+    name = n_ame;
+    place = p_lace;
+}
+
+void Meeting::info() {
+    int t1 = this->getTime() / 60;
+    int t2 = this->getTime() % 60;
+    this->printDate();              
+    if (t2 < 10) {
+        cout << setw(4) << t1 << ":0" << t2;
+    }else {
+        cout << setw(4) << t1 << ":" << t2;
     }
 
-    void Meeting::info() {
-        int t1 = this->getTime() / 60;
-        int t2 = this->getTime() % 60;
-        this->printDate();               
-        if (t2 < 10) {
-            cout << setw(4) << t1 << ":0" << t2;
-        }
-        else {
-            cout << setw(4) << t1 << ":" << t2;
-        }
-
-        cout << " - " << name << " at the " << place << endl;
-    }
-
-
+    cout << " - " << name << " at the " << place << endl;
+}
 
 
 Birthday::Birthday() {
-        name = "";
-        place = "";
-        age = 0;
-    }
+    name = "";
+    place = "";
+    age = 0;
+}
 
 Birthday::Birthday(string n_ame, string p_lace, int a_ge, int year, int month, int day, int t_ime) : Event(year, month, day, t_ime) {
-        name = n_ame;
-        place = p_lace;
-        age = a_ge;
+    name = n_ame;
+    place = p_lace;
+    age = a_ge;
+}
+
+void Birthday::info() {
+    int t1 = this->getTime() / 60;
+    int t2 = this->getTime() % 60;
+    this->printDate();
+    if (t2 < 10) {
+        cout << setw(4) << t1 << ":0" << t2;
+    }else {
+        cout << setw(4) << t1 << ":" << t2;
     }
 
-    void Birthday::info() {
-        int t1 = this->getTime() / 60;
-        int t2 = this->getTime() % 60;
-        this->printDate();
-        if (t2 < 10) {
-            cout << setw(4) << t1 << ":0" << t2;
-        }
-        else {
-            cout << setw(4) << t1 << ":" << t2;
-        }
-
-        cout << " - " << "Celebration of " << name << "'s " << age << " Birthday at the " << place << endl;
-    }
+    cout << " - " << "Celebration of " << name << "'s " << age << " Birthday at the " << place << endl;
+}
 
 
 bool check_date(int y, int m, int d) {
@@ -262,14 +249,13 @@ void menu(Meeting* meetings, int n, int y, int m, int d) {
             break;
 
         case 2:
-
             b = create_birthday(y, m, d);
-
             break;
 
         case 3:
             show_schedule(meetings, b, n);
             break;
+
         case 4:
             cout << "byee!!" << endl;
             flag = false;
