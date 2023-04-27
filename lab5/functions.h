@@ -8,7 +8,6 @@ using namespace std;
 
 #pragma once
 
-
 class Event {
 private:
     tm date;
@@ -19,12 +18,6 @@ public:
     Event();
 
     Event(int y_ear, int m_onth, int d_ay, int t_ime);
-
-    int getYear();
-
-    int getMonth();
-
-    int getDay();
 
     int getTime();
 
