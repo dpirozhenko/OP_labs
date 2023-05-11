@@ -1,0 +1,181 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+
+class TMatrix{
+private:
+    int rows, cols;
+    int* pMatrix;
+public:
+
+    
+	TMatrix(int Rows, int Cols) {
+		rows = Rows;
+		cols = Cols;
+
+		pMatrix = new int[rows * cols];
+        srand(time(NULL));
+
+        for (int i = 0; i < rows * cols; i++) {
+		     
+            int n = -100 + rand() % 1000;
+            pMatrix[i] = n;
+		    
+	    }
+
+	}
+
+    int get_matrix(int n){return pMatrix[n];}
+    void set_matrix(int i, int d){
+        pMatrix[i] = d;
+    }
+
+    int get_cols(){return cols;}
+    int get_rows(){return rows;}
+
+    TMatrix(int size) {
+		rows = size;
+		cols = size;
+
+		pMatrix = new int[rows * cols];
+        srand(time(NULL));
+
+        for (int i = 0; i < rows * cols; i++) {
+		     
+            int n = rand() % 10;
+            pMatrix[i] = n;
+		    
+	    }
+	}
+    
+	Matrix(const TMatrix& matrix) {
+		rows = matrix.rows;
+		cols = matrix.cols;
+		pMatrix = new int[rows * cols];
+
+		for (int i = 0; i < rows * cols; i++) {
+			pMatrix[i] = matrix.pMatrix[i];
+		}
+
+	}
+
+    ~TMatrix(){
+        delete[] pMatrix;
+    }
+
+    virtual int Det() = 0; 
+
+    friend ostream& operator<< (ostream& s, const TMatrix& matrix);
+
+};
+
+ostream& operator<< (ostream& s, const TMatrix& matrix) {
+	
+    s << endl;
+    for (int i = 0; i < matrix.rows; i++) {
+		for (int j = 0; j < matrix.cols; j++) {
+			s << matrix.pMatrix[i * matrix.cols + j] << " ";
+		}
+		s << endl;
+	}
+
+	return s;
+}
+
+class Matrix2: public TMatrix
+{
+
+public:
+    Matrix2(int num): TMatrix(num){};
+    
+    int Det(){
+        cout << "determinator for 2";
+		return get_matrix(0) * get_matrix(3) - get_matrix(1) * get_matrix(2);
+			
+    }
+};
+
+
+
+class Matrix3: public TMatrix
+{
+
+public:
+    Matrix3(int num): TMatrix(num) {};
+
+    
+    Matrix3 Minor_Matrix(int Row, int Col) {
+		if (Row <= get_rows() && Col <= get_cols()) {
+            int k = get_cols()- 1;
+			Matrix3 result(k);
+
+			int curi = 0, curj = 0;
+			for (int i = 0; i < get_rows(); i++) 
+			{
+				if (i == Row - 1) 
+					curi--;
+				
+				for (int j = 0; j < get_cols(); j++) 
+				{
+					if (j == Col - 1) 
+						curj--;
+
+					if (i != Row - 1 && j != Col - 1) {
+                        int d = get_matrix(i * get_cols() + j);
+                       
+						result.set_matrix((curi * (get_cols() - 1) + curj), d);					
+
+                    }
+
+					curj++;
+				}
+
+				curj = 0;
+				curi++;
+				
+			}
+			return result;
+		}
+	}
+    
+    int Minor(int Row, int Col) {
+		if (get_rows() == get_cols() && Row <= get_rows() && Col <= get_cols()) {
+			return this->Minor_Matrix(Row, Col).Det();
+		}
+	}
+
+    int AlgCompl(int Row, int Col) {
+		if (get_rows() == get_cols() && Row <= get_rows() && Col <= get_cols()) {
+			return (((Row + Col) % 2 == 0) ? 1 : -1 ) * this->Minor(Row, Col); 
+		}
+	}
+
+    int Det(){
+        cout << "determinator for 3";
+        int det = get_matrix(0) * AlgCompl(1, 1);
+        for (int i = 2; i <= get_rows(); i++) {
+            det += get_matrix((i - 1 * get_cols())) * AlgCompl(i, 1); 
+        }
+        return det;
+               
+    }
+};
+
+
+
+int main(){
+    Matrix2 a1(2);
+
+    cout << a1 << endl;
+
+    cout << a1.Det();
+
+    Matrix3 a2(3);
+
+    cout << a2 << endl;
+
+    cout << a2.Det();
+
+}
