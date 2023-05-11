@@ -1,0 +1,54 @@
+#include <iostream>
+#include <string>
+
+class Word {
+private:
+    std::string word;
+
+public:
+    Word(std::string w) : word(w) {}
+
+    std::string getWord() const {
+        return word;
+    }
+
+    int countDigits() const {
+        int digitCount = 0;
+        for (char c : word) {
+            if (std::isdigit(c)) {
+                digitCount++;
+            }
+        }
+        return digitCount;
+    }
+};
+
+std::string findWordWithMaxDigits(const Word words[], int size) {
+    int maxDigitCount = 0;
+    std::string wordWithMaxDigits;
+
+    for (int i = 0; i < size; i++) {
+        int digitCount = words[i].countDigits();
+        if (digitCount > maxDigitCount) {
+            maxDigitCount = digitCount;
+            wordWithMaxDigits = words[i].getWord();
+        }
+    }
+
+    return wordWithMaxDigits;
+}
+
+int main() {
+    const int arraySize = 5;
+    Word words[arraySize] = { Word("hello"), Word("world123"), Word("openai"), Word("gpt3"), Word("language") };
+
+    std::string wordWithMaxDigits = findWordWithMaxDigits(words, arraySize);
+
+    if (!wordWithMaxDigits.empty()) {
+        std::cout << "Word with the most digits: " << wordWithMaxDigits << std::endl;
+    } else {
+        std::cout << "No word with digits found." << std::endl;
+    }
+
+    return 0;
+}
