@@ -1,0 +1,45 @@
+#include <iostream>
+
+using namespace std;
+
+class fracttion
+{
+private:
+    int num;
+    int den;
+public:
+    fracttion(int n1, int n2){
+        num = n1;
+        den = n2;
+    }
+
+
+    void info(){
+        cout << "number is " << num << ":" << den << endl;
+    }
+
+    fracttion operator *(const fracttion& obj){
+        cout << "\nadding numbers" << endl;
+
+        int n1 = num * obj.num;
+        int n2 = den * obj.den;
+
+        return fracttion(n1, n2);
+
+    }
+
+};
+
+
+int main(){
+
+    fracttion a1(5, 2);
+    fracttion a2(9, 3);
+
+    a1.info();
+    a2.info();
+
+    fracttion a3 = a1 * a2;
+    a3.info();
+
+}
