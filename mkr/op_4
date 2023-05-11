@@ -1,0 +1,62 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Number{
+    private:
+        int n1;
+        int n2;
+    public:
+        Number(int a1, int a2){
+            if(a1 >= a2){
+                n1 = a1;
+                n2 = a2;
+            }else{
+                cout << "wrong input...";
+                n1 = n2 = 0;
+            }
+
+        }
+
+
+        Number& operator +=(int n){
+            cout << "\nincrementing by " << n << endl;
+            this->n1 = this->n1 + (this->n2 * n);
+            return *this;
+        }
+
+        friend ostream& operator<<(ostream& os, const Number& obj);
+
+};
+
+
+ostream& operator<<(ostream& os, const Number& obj){
+    os << "number is " << obj.n1 << "/" << obj.n2 << endl;
+    return os;
+}
+
+main(){
+    string s1, s2;
+    int a, b, c, d;
+
+    cout << "enter number: ";
+    cin >> s1;
+    sscanf(s1.c_str(), "%d/%d", &a, &b);
+    Number a1(a, b);
+    
+
+    cout << "enter number: ";
+    cin >> s2;
+    sscanf(s2.c_str(), "%d/%d", &c, &d);
+    Number a2(c, d);
+    
+    cout << a1 << endl;
+    a1 += 3;
+    cout << a1 << endl;
+
+    cout << a2 << endl;
+    a2 += 5;
+    cout << a2 << endl;
+
+}///17 minutesssssssssss
