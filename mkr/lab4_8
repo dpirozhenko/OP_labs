@@ -1,0 +1,205 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+
+using namespace std;
+
+class Numeral_16{
+    private:
+        string number;
+    
+    public:
+        Numeral_16(){
+            number = " ";
+        }
+
+        Numeral_16(string n){
+            number = n;
+        }
+
+        string get_number() {return number;}
+
+        int to_decimal(){
+            int decimalNumber = 0;
+            int power = 0;
+            
+            for (int i = number.length() - 1; i >= 0; i--) {
+                char currentDigit = number[i];
+                int digitValue = 0;
+                
+                if (currentDigit >= '0' && currentDigit <= '9') {
+                    digitValue = currentDigit - '0';  
+                } else if (currentDigit >= 'A' && currentDigit <= 'F') {
+                    digitValue = currentDigit - 'A' + 10;  
+                } else if (currentDigit >= 'a' && currentDigit <= 'f') {
+                    digitValue = currentDigit - 'a' + 10;  
+                } else {
+                    
+                    std::cout << "wrorn symbol: " << currentDigit << std::endl;
+                    return 0;
+                }
+                
+                decimalNumber += digitValue * pow(16, power);  
+                power++;
+            }
+            
+            return decimalNumber;
+        }
+
+
+        Numeral_16 operator ++ (int n){
+            
+            int length = number.length();
+            int carry = 1; 
+
+            // Проходимо через кожен символ у зворотному порядку
+            for (int i = length - 1; i >= 0; i--) {
+                char currentDigit = number[i];
+
+                // Збільшуємо поточну цифру на 1 і обробляємо перенос
+                if (currentDigit >= '0' && currentDigit <= '9') {
+                    currentDigit += carry;
+                    if (currentDigit > '9') {
+                        currentDigit = 'A';  // Якщо перевищуємо 9, переходимо до літери A
+                        carry = 1;
+                    } else {
+                        carry = 0;
+                    }
+                } else if (currentDigit >= 'A' && currentDigit <= 'F') {
+                    currentDigit += carry;
+                    if (currentDigit > 'F') {
+                        currentDigit = '0';  // Якщо перевищуємо F, переходимо до цифри 0
+                        carry = 1;
+                    } else {
+                        carry = 0;
+                    }
+                }
+
+                number[i] = currentDigit;
+
+                // Якщо немає переносу, закінчуємо інкрементування
+                if (carry == 0) {
+                    break;
+                }
+            }
+
+            // Якщо все ж є перенос, додаємо його як новий розряд
+            if (carry == 1) {
+                number = '1' + number;
+            }
+
+            return *this;            
+        }
+
+        Numeral_16 operator += (string num){
+            // Додаємо шістнадцяткове число до поточного числа
+            int carry = 0;
+            int length = number.length();
+            int hexLength = num.length();
+            int maxLength = std::max(length, hexLength);
+            std::string result;
+
+            // Заповнюємо недостатні розряди нулями
+            std::string paddedHex = number;
+            while (paddedHex.length() < maxLength) {
+                paddedHex = '0' + paddedHex;
+            }
+
+            // Додаємо відповідні розряди чисел
+            for (int i = maxLength - 1; i >= 0; i--) {
+                char currentDigit = paddedHex[i];
+                char operandDigit = (i < hexLength) ? num[i] : '0';
+
+                int sum = (currentDigit >= '0' && currentDigit <= '9' ? currentDigit - '0' : currentDigit - 'A' + 10)
+                        + (operandDigit >= '0' && operandDigit <= '9' ? operandDigit - '0' : operandDigit - 'A' + 10)
+                        + carry;
+
+                carry = sum / 16;
+                int remainder = sum % 16;
+
+                char newDigit = (remainder < 10) ? remainder + '0' : remainder + 'A' - 10;
+                result = newDigit + result;
+            }
+
+            if (carry > 0) {
+                result = '1' + result;
+            }
+
+            number = result;
+            return *this;
+        }
+
+        Numeral_16 operator+(const Numeral_16& other) const {
+            // Додаємо два шістнадцяткових числа
+            int carry = 0;
+            int length = number.length();
+            int otherLength = other.number.length();
+            int maxLength = std::max(length, otherLength);
+            std::string result;
+
+            // Заповнюємо недостатні розряди нулями
+            std::string paddedHex = number;
+            std::string paddedOther = other.number;
+            while (paddedHex.length() < maxLength) {
+                paddedHex = '0' + paddedHex;
+            }
+            while (paddedOther.length() < maxLength) {
+                paddedOther = '0' + paddedOther;
+            }
+
+            // Додаємо відповідні розряди чисел
+            for (int i = maxLength - 1; i >= 0; i--) {
+                char currentDigit = paddedHex[i];
+                char otherDigit = paddedOther[i];
+
+                int sum = (currentDigit >= '0' && currentDigit <= '9' ? currentDigit - '0' : currentDigit - 'A' + 10)
+                        + (otherDigit >= '0' && otherDigit <= '9' ? otherDigit - '0' : otherDigit - 'A' + 10)
+                        + carry;
+
+                carry = sum / 16;
+                int remainder = sum % 16;
+
+                char newDigit = (remainder < 10) ? remainder + '0' : remainder + 'A' - 10;
+                result = newDigit + result;
+            }
+
+            if (carry > 0) {
+                result = '1' + result;
+            }
+
+            return Numeral_16(result);
+        }
+
+        void info(){
+            cout << "num is " << number << endl; 
+        }
+
+
+};
+
+
+int main() {
+    
+    string s1 = "ff";
+    string s2 = "3a5c";
+
+    Numeral_16 n1(s1);
+    Numeral_16 n2(s2);
+    Numeral_16 n3;
+
+    n1.info();
+    n1++;
+    n1.info();
+
+    n2.info();
+    n2+="ca3";
+    n2.info();
+    
+    n3 = n1 + n2;
+    n3.info();
+
+
+
+    
+    return 0;
+}
