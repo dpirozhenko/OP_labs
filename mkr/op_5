@@ -1,0 +1,65 @@
+#include <iostream>
+
+using namespace std;
+
+class Number{
+private:
+    int n1, n2;
+
+public:
+
+    Number(int N1, int N2){
+        if(N1 >= N2){
+            cout << "wrong numbers.. I wil change themm" << endl;
+            n1 = N2;
+            n2 = N1;
+        }else{
+            n1 = N1;
+            n2 = N2;
+        }
+        
+    }
+
+    friend ostream& operator<< (ostream& os, const Number& obj);
+
+    bool operator> (Number& obj){
+        cout << "Bigger ";
+        if(n1*obj.n2 > obj.n1 * n2){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+
+};
+
+ostream& operator<< (ostream& os, const Number& obj){
+    os << "number is " << obj.n1 << ":" << obj.n2 << endl;
+    return os;
+}
+
+int main(){
+    string s1, s2;
+    int a, b, c, d;
+
+    cout << "enter number: ";
+    cin >> s1;
+    sscanf(s1.c_str(), "%d:%d", &a, &b);
+    Number a1(a, b);
+    cout << a1 << endl;
+
+    cout << "enter number: ";
+    cin >> s2;
+    sscanf(s2.c_str(), "%d:%d", &c, &d);
+    Number a2(c, d);
+    cout << a2 << endl;
+
+    if(a1 > a2){
+        cout << a1 << endl;
+    }else{
+        cout << a2 << endl;
+    }
+
+}//17 minutesss
