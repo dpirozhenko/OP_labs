@@ -20,10 +20,11 @@ class HashTable {
 private:
     int size;
     Node<KeyType, ValueType>* table;
-
-    unsigned int hashFunction(const KeyType& key);
+    unsigned int MurmurHash2(const KeyType* key, int len, int seed);
+    int hashFunction(const KeyType& key);
 
 public:
+
     HashTable(int size);
     ~HashTable();
 
